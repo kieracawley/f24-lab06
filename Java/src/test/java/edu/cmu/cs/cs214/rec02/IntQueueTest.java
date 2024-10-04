@@ -38,8 +38,8 @@ public class IntQueueTest {
     @Before
     public void setUp() {
         // comment/uncomment these lines to test each class
-        mQueue = new LinkedIntQueue();
-        // mQueue = new ArrayIntQueue();
+        // mQueue = new LinkedIntQueue();
+        mQueue = new ArrayIntQueue();
         testList = new ArrayList<>(List.of(1, 2, 3));
     }
 
@@ -51,7 +51,7 @@ public class IntQueueTest {
 
     @Test
     public void testNotEmpty() {
-        assertTrue(!mQueue.isEmpty());
+        assertFalse(mQueue.isEmpty());
     }
 
     @Test
@@ -112,8 +112,16 @@ public class IntQueueTest {
         testEnqueue();
         testNotEmpty();
         testPeekNoEmptyQueue();
+        mQueue.clear();
+        testIsEmpty();
+        testEnqueue();
         testDequeue();
         testIsEmpty();
     }
 
 }
+
+// ArrayIntQueue Bugs:
+// 1) Queue is not empty upon creation (has 0 at the head rather than null)
+// 2) isEmpty remains true regardless of whether the queue is empty or not
+// 3) dequeue() always returns null 
