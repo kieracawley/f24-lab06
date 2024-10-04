@@ -51,6 +51,7 @@ public class IntQueueTest {
 
     @Test
     public void testNotEmpty() {
+        mQueue.enqueue(testList.get(0));
         assertFalse(mQueue.isEmpty());
     }
 
@@ -61,6 +62,7 @@ public class IntQueueTest {
 
     @Test
     public void testPeekNoEmptyQueue() {
+        mQueue.enqueue(testList.get(0));
         assertNotEquals(null, mQueue.peek());
     }
 
@@ -76,6 +78,9 @@ public class IntQueueTest {
 
     @Test
     public void testDequeue() {
+        for (int i = 0; i < testList.size(); i++) {
+            mQueue.enqueue(testList.get(i));
+        }
         for (int i = 0; i < testList.size(); i++) {
             Integer dequeued = mQueue.dequeue();
             assertEquals(testList.get(i), dequeued);
@@ -105,23 +110,38 @@ public class IntQueueTest {
     }
 
     @Test
-    public void runUnitTests() {
-        setUp();
-        testIsEmpty();
-        testPeekEmptyQueue();
-        testEnqueue();
-        testNotEmpty();
-        testPeekNoEmptyQueue();
+    public void testCapacity() {
+        List<Integer> longTestList = new ArrayList<>(List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
+        mQueue.clear();
+        for (int i = 0; i < longTestList.size(); i++) {
+            mQueue.enqueue(longTestList.get(i));
+            assertEquals(longTestList.get(0), mQueue.peek());
+            assertEquals(i + 1, mQueue.size());
+        }
+        mQueue.dequeue();
+        for (int i = 0; i < longTestList.size(); i++) {
+            mQueue.enqueue(longTestList.get(i));
+        }
+        for (int i = 0; i < testList.size(); i++) {
+            mQueue.enqueue(testList.get(i));
+        }
+    }
+
+    @Test
+    public void testClear () {
         mQueue.clear();
         testIsEmpty();
-        testEnqueue();
-        testDequeue();
-        testIsEmpty();
+    }
+
+    @Test
+    public void testDequeueEmpty() {
+        mQueue.clear();
+        mQueue.dequeue();
     }
 
 }
 
 // ArrayIntQueue Bugs:
-// 1) Queue is not empty upon creation (has 0 at the head rather than null)
+// 1) Peeking an empty queue returns 0 rather than null
 // 2) isEmpty remains true regardless of whether the queue is empty or not
 // 3) dequeue() always returns null 
